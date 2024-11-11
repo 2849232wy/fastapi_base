@@ -1,15 +1,14 @@
-from optparse import Option
-from typing import Optional, Union
+from typing import Optional
 
 from datetime import datetime, timedelta, timezone
 
 import jwt
 from fastapi.security.utils import get_authorization_scheme_param
 
-from Student.models import Teacher, Student
+from dbmodels.models import Teacher, Student
 
 from fastapi import Depends, APIRouter, Body
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer
 from jwt.exceptions import InvalidTokenError
 from passlib.context import CryptContext
 from pydantic import BaseModel

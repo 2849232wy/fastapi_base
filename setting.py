@@ -4,7 +4,7 @@ TORTOISE_ORM = {
     },
     "apps": {
         "models": {
-            "models": ["Student.models", "aerich.models"],
+            "models": ["dbmodels.models", "aerich.models"],
             "default_connection": "default"  # 确保这是一个字符串
         }
     }

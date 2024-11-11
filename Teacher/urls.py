@@ -6,7 +6,7 @@ from fastapi import  APIRouter, Body
 from pydantic import BaseModel
 
 from Response.ResponseModel import ResponseModel
-from Student.models import Teacher
+from dbmodels.models import Teacher
 from exception.ResponseException import ResponseException
 from filters.filterAuth import get_password_hash
 
