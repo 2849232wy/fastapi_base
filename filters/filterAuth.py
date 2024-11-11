@@ -46,7 +46,8 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    username: Optional[str] = None
+    id: Optional[str] = None
+    type: Optional[int] = None
 
 
 
@@ -73,7 +74,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
         expire = datetime.now(timezone.utc) + expires_delta
     else:
         expire = datetime.now(timezone.utc) + timedelta(minutes=15)
-    to_encode.update({"exp": expire.isoformat()})
+    to_encode.update({"exp": int(expire.timestamp())})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
@@ -90,11 +91,14 @@ async def verify_token(token: Annotated[str, Depends(oauth2_scheme)]):
         msg="无效的token"
     )
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        id: str = payload.get("id")
+        payload = jwt.decode(token,SECRET_KEY, algorithms=[ALGORITHM])
+        tokenData:TokenData = TokenData()
+        tokenData.id = payload.get("id")
+        tokenData.type = payload.get("type")
         if id is None:
-            raise credentials_exception
-        yield id
+            raise ResponseException(code=500, msg="用户不存在")
+
+        return tokenData
     except InvalidTokenError:
         raise credentials_exception
 
